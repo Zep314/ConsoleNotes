@@ -9,7 +9,8 @@ class Controller(object):
         self._data = Data()
 
     def add(self):
-        title, note = self._view.add()
+        self._view.print('Добавление записи')
+        title, note = self._view.add_edit()
         self._data.add(title, note)
         self._view.print('Данные добавлены')
         add2log('Добавление данных:', '<')
@@ -30,8 +31,26 @@ class Controller(object):
         add2log("Данные записаны в файл.", '>')
 
     def delete(self):
-        idx = self._view.select_record()
-        #### !!!!!!!!!!!!!!!!!!! ТУТ ДОДЕЛАТЬ!!!!
+        idx = int(self._view.select_record())
+        if idx > -1:
+            if self._data.delete(idx) != -1:
+                self._view.print(f"Запись {idx} удалена!")
+                add2log(f"Запись {idx} удалена!",">")
+            else:
+                self._view.print("Ошибка! Записи с таким индексом для удаления не найдено!")
+                add2log(f"Ошибка удаления записи {str(idx)}. Записи не существует!",">")
+    def edit(self):
+        idx = int(self._view.select_record())
+        if idx > -1:
+            self._view.print('Редактирование записи')
+            self._view.print('Если данные менять не нужно - оставьте их пустыми')
+            title, note = self._view.add_edit()
+            if self._data.edit(idx, title, note) != -1:
+                self._view.print(f"Запись {idx} успешно изменена! title => {title}, note => {note}")
+                add2log(f"Запись {idx} изменена! title => {title}, note => {note}", ">")
+            else:
+                self._view.print("Ошибка! Записи с таким индексом для редактирования не найдено!")
+                add2log(f"Ошибка редактирования записи {str(idx)}. Записи не существует!",">")
 
     def run(self):
         self._view.info()
@@ -48,6 +67,8 @@ class Controller(object):
                     self._view.help()
                 case '/add':
                     self.add()
+                case '/edit':
+                    self.edit()
                 case '/del':
                     self.delete()
                 case '/list':
@@ -57,7 +78,7 @@ class Controller(object):
                 case '/load':
                     self.load()
                 case _:
-                    print('Неверная команда. Для помощи наберите /help')
+                    self._view.print('Неверная команда. Для помощи наберите /help')
         self._view.buy()
-        self.save()
+#        self.save()
         add2log('Завершение работы.', '>')

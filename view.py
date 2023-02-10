@@ -27,8 +27,7 @@ class View():
         print('\t /del  - удалить заметку')
         print('\t /save - принудительно сохранить базу в файл')
 
-    def add(self):
-        print('Добавление записи')
+    def add_edit(self):
         title: str = input('Введите заголовок заметки: ')
         note: str = input('Описание заметки: ')
         return (title, note)
