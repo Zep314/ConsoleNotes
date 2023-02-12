@@ -13,8 +13,7 @@ class Controller(object):
         title, note = self._view.add_edit()
         self._data.add(title, note)
         self._view.print('Данные добавлены')
-        add2log('Добавление данных:', '<')
-        add2log(f'Title = {title}; Note = {note} ', '<')
+        add2log(f'Добавление данных: Title = {title}; Note = {note} ', '<')
 
     def list(self):
         self._view.show_records(self._data)
@@ -35,10 +34,11 @@ class Controller(object):
         if idx > -1:
             if self._data.delete(idx) != -1:
                 self._view.print(f"Запись {idx} удалена!")
-                add2log(f"Запись {idx} удалена!",">")
+                add2log(f"Запись {idx} удалена!", "<")
             else:
                 self._view.print("Ошибка! Записи с таким индексом для удаления не найдено!")
-                add2log(f"Ошибка удаления записи {str(idx)}. Записи не существует!",">")
+                add2log(f"Ошибка удаления записи {str(idx)}. Записи не существует!", ">")
+
     def edit(self):
         idx = int(self._view.select_record())
         if idx > -1:
@@ -50,7 +50,7 @@ class Controller(object):
                 add2log(f"Запись {idx} изменена! title => {title}, note => {note}", ">")
             else:
                 self._view.print("Ошибка! Записи с таким индексом для редактирования не найдено!")
-                add2log(f"Ошибка редактирования записи {str(idx)}. Записи не существует!",">")
+                add2log(f"Ошибка редактирования записи {str(idx)}. Записи не существует!", "<")
 
     def run(self):
         self._view.info()
@@ -80,5 +80,5 @@ class Controller(object):
                 case _:
                     self._view.print('Неверная команда. Для помощи наберите /help')
         self._view.buy()
-#        self.save()
-        add2log('Завершение работы.', '>')
+        #        self.save()
+        add2log('Завершение работы.', '<')
